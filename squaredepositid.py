@@ -4,7 +4,14 @@ from tkinter import filedialog
 from tkinter import *
 import operator
 
-# --------------------
+
+def format_date(orig_date):
+    # e.g. orig_date = 04/01/18
+    # output = 2018-04-01
+    new_date_split = orig_date.split('/')
+    fm_year = '20' + new_date_split[2]
+    new_date = [fm_year, new_date_split[0], new_date_split[1]]
+    return '-'.join(new_date)
 
 def main():
     # Opens a window to select the file (.csv)
@@ -35,13 +42,6 @@ def main():
     print('first ', first_date)
     print('last ', last_date)
 
-    def format_date(orig_date):
-        # e.g. orig_date = 04/01/18
-        # output = 2018-04-01
-        new_date_split = orig_date.split('/')
-        fm_year = '20' + new_date_split[2]
-        new_date = [fm_year, new_date_split[0], new_date_split[1]]
-        return '-'.join(new_date)
 
 
     # Format dates w/ year month then day
@@ -122,7 +122,7 @@ def main():
     with open(new_fn, mode='w') as square_deposits:
         square_writer = csv.writer(square_deposits, delimiter=',', quotechar='"')
         square_writer.writerow(
-            ['Deposit Date', 'Deposit ID', 'Collected', 'Fees', 'Deposited'])
+            ['Deposit Date', 'Deposit ID', 'Total Collected', 'Fees', 'Deposited'])
 
         for r in sorted_list:
             row = r[0].split(',')
