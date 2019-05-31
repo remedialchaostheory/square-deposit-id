@@ -24,7 +24,7 @@ def calc_card_collected(fees, deposited):
     :param deposited: e.g. 100.00
     :return: e.g. 109.9
     """
-    return deposited - fees
+    return round(deposited - fees, 2)
 
 def main():
     # Open a window to select the file (.csv)
@@ -41,21 +41,18 @@ def main():
 
     # ---------------------
 
-    # Open the csv file
-    # Create an array of each row
+    # Open the csv file and create an array of each row
     raw_data = []
     with open(root.filename, 'r') as f:
         reader = csv.reader(f)
         for row in reader:
             raw_data.append(row)
 
-    # Get first and last date of the CSV contents
+    # Get first and last date of the csv contents
     first_date = raw_data[-1][0].split(',')[0]
     last_date = raw_data[1][0].split(',')[0]
     print('first ', first_date)
     print('last ', last_date)
-
-
 
     # Format dates w/ year month then day
     first_date = format_date(first_date)
@@ -66,7 +63,7 @@ def main():
               first_date + '-' + last_date + '.csv')
 
     # deposit_date = [0]
-    # collected = [5]
+    # total_collected = [5]
     # fees = [6]
     # deposited = [7]
     # deposit_id = [8]
@@ -74,7 +71,7 @@ def main():
     # Iterate through raw_data and save
     square = {}
     deposit_date = ''
-    collected = 0
+    total_collected = 0
     fees = 0
     deposited = 0
     deposit_id = 0
@@ -85,9 +82,9 @@ def main():
         deposit_id = row[8]
         deposit_date = row[0]
 
-        collected = row[5]
-        collected = ''.join(collected.split('$'))
-        collected = float(''.join(collected.split(',')))
+        total_collected = row[5]
+        total_collected = ''.join(total_collected.split('$'))
+        total_collected = float(''.join(total_collected.split(',')))
 
         fees = row[6]
         fees = float(''.join(fees.split('$')))
@@ -96,23 +93,32 @@ def main():
         deposited = ''.join(deposited.split('$'))
         deposited = float(''.join(deposited.split(',')))
 
-        # print(deposit_date, collected, fees, deposited, deposit_id)
+        # print(deposit_date, total_collected, fees, deposited, deposit_id)
 
+        # E.g. {'2Z66AKKQ0DJC8YK5AVBY12E74ZE9': ['12/31/18', 113.35, -3.13, 110.22]}
         if deposit_id not in square:
-            square[deposit_id] = [deposit_date, collected, fees, deposited]
+            square[deposit_id] = [deposit_date, total_collected, fees, deposited]
         else:
-            square[deposit_id][1] += collected
+            square[deposit_id][1] += total_collected
             square[deposit_id][2] += fees
             square[deposit_id][3] += deposited
 
 
-        # square[deposit_id]['collected'] = square[deposit_id]['collected'] + collected
+        # square[deposit_id]['total_collected'] = square[deposit_id]['total_collected'] + total_collected
 
     # Round decimal places to 2
     for id in square:
         square[id][1] = round(square[id][1], 2)
         square[id][2] = round(square[id][2], 2)
         square[id][3] = round(square[id][3], 2)
+
+    # Insert "card collected" values after "total_collected"
+    print("")
+    for id in square:
+        fees = square[id][2]
+        deposited = square[id][3]
+        card_collected = calc_card_collected(fees, deposited)
+        square[id].insert(2, card_collected)
 
     print("square ", square)
 
@@ -122,7 +128,7 @@ def main():
 
         for id in square:
             square_writer.writerow(
-                [square[id][0], id, square[id][1], square[id][2], square[id][3]])
+                [square[id][0], id, square[id][1], square[id][2], square[id][3], square[id][4]])
 
     square_deposits.close()
 
@@ -135,14 +141,13 @@ def main():
     with open(new_fn, mode='w') as square_deposits:
         square_writer = csv.writer(square_deposits, delimiter=',', quotechar='"')
         square_writer.writerow(
-            ['Deposit Date', 'Deposit ID', 'Total Collected', 'Fees', 'Deposited'])
+            ['Deposit Date', 'Deposit ID', 'Total Collected', 'Card Collected', 'Fees', 'Deposited'])
 
         for r in sorted_list:
             row = r[0].split(',')
             print(row)
-            square_writer.writerow([row[0], row[1], row[2], row[3], row[4]])
+            square_writer.writerow([row[0], row[1], row[2], row[3], row[4], row[5]])
 
-    print(sorted_list)
 
 if __name__ == '__main__':
     main()
