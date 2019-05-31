@@ -35,9 +35,9 @@ def main():
     print('first ', first_date)
     print('last ', last_date)
 
-    # e.g. orig_date = 04/01/18
-    # output = 2018-04-01
     def format_date(orig_date):
+        # e.g. orig_date = 04/01/18
+        # output = 2018-04-01
         new_date_split = orig_date.split('/')
         fm_year = '20' + new_date_split[2]
         new_date = [fm_year, new_date_split[0], new_date_split[1]]
@@ -96,29 +96,33 @@ def main():
         # square[deposit_id]['collected'] = square[deposit_id]['collected'] + collected
 
     # Round decimal places to 2
-    for k in square:
-        square[k][1] = round(square[k][1], 2)
-        square[k][2] = round(square[k][2], 2)
-        square[k][3] = round(square[k][3], 2)
+    for id in square:
+        square[id][1] = round(square[id][1], 2)
+        square[id][2] = round(square[id][2], 2)
+        square[id][3] = round(square[id][3], 2)
 
     print(square)
 
+    # Write data to new .csv file
     with open(new_fn, mode='w') as square_deposits:
         square_writer = csv.writer(square_deposits, delimiter=',', quotechar='"')
 
-        for k in square:
-            square_writer.writerow([square[k][0], k, square[k][1], square[k][2], square[k][3]])
+        for id in square:
+            square_writer.writerow(
+                [square[id][0], id, square[id][1], square[id][2], square[id][3]])
 
     square_deposits.close()
 
-    # Sort by date
+    # TODO - can refactor this to only open file once by sorting beforehand
+    # Reopen file to sort by date
     reader = csv.reader(open(new_fn), delimiter=";")
     sorted_list = sorted(reader, key=operator.itemgetter(0), reverse=False)
 
-    # Create new .CSV file
+    # Write sorted data with headings
     with open(new_fn, mode='w') as square_deposits:
         square_writer = csv.writer(square_deposits, delimiter=',', quotechar='"')
-        square_writer.writerow(['Deposit Date', 'Deposit ID', 'Collected', 'Fees', 'Deposited'])
+        square_writer.writerow(
+            ['Deposit Date', 'Deposit ID', 'Collected', 'Fees', 'Deposited'])
 
         for r in sorted_list:
             row = r[0].split(',')
