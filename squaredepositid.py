@@ -6,15 +6,28 @@ import operator
 
 
 def format_date(orig_date):
-    # e.g. orig_date = 04/01/18
-    # output = 2018-04-01
+    """
+    :param orig_date: e.g. 04/01/18
+    :return: e.g. 2018-04-01
+    """
     new_date_split = orig_date.split('/')
     fm_year = '20' + new_date_split[2]
     new_date = [fm_year, new_date_split[0], new_date_split[1]]
     return '-'.join(new_date)
 
+def calc_card_collected(fees, deposited):
+    """
+    Card collected = deposited - fees
+
+    NOTE: fees are negative numbers
+    :param fees: e.g. -9.90
+    :param deposited: e.g. 100.00
+    :return: e.g. 109.9
+    """
+    return deposited - fees
+
 def main():
-    # Opens a window to select the file (.csv)
+    # Open a window to select the file (.csv)
     root = Tk()
     root.filename = filedialog.askopenfilename(
         initialdir = "/",title = "Select file",filetypes =
@@ -101,7 +114,7 @@ def main():
         square[id][2] = round(square[id][2], 2)
         square[id][3] = round(square[id][3], 2)
 
-    print(square)
+    print("square ", square)
 
     # Write data to new .csv file
     with open(new_fn, mode='w') as square_deposits:
