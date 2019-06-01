@@ -46,6 +46,7 @@ def main():
     # Open a window to select the file (.csv)
     home = str(Path.home())
     root = Tk()
+    root.withdraw()  # Hide empty window
     messagebox.showinfo(
         "Hola!", "Please select a Square deposit file\n\nIt should begin with: \"deposit-details-\"")
     root.filename = filedialog.askopenfilename(
