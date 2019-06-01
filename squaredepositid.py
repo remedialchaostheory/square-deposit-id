@@ -1,7 +1,8 @@
 #!usr/bin/env python3
 import csv
-from tkinter import filedialog
 from tkinter import *
+from tkinter import filedialog
+from tkinter import messagebox
 from operator import itemgetter
 from pathlib import Path
 
@@ -45,9 +46,13 @@ def main():
     # Open a window to select the file (.csv)
     home = str(Path.home())
     root = Tk()
+    messagebox.showinfo(
+        "Hola!", "Please select a Square deposit file\n\nIt should begin with: \"deposit-details-\"")
     root.filename = filedialog.askopenfilename(
         initialdir=home+"/Downloads", title="Select Square deposit file", filetypes=
         (("csv files", "*.csv"), ("all files", "*.*")))
+
+    # info_button = Button(root, text="Please select Square deposit file")
 
     print(f"Opening file {root.filename}")
     square_filename = root.filename.split('/')[-1]
