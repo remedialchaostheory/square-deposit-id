@@ -5,6 +5,7 @@ from tkinter import *
 from operator import itemgetter
 from pathlib import Path
 
+
 def format_date(orig_date):
     """
     :param orig_date: e.g. 04/01/18
@@ -42,10 +43,11 @@ def main():
     # Uncomment for production
     # ------------------------
     # Open a window to select the file (.csv)
+    home = str(Path.home())
     root = Tk()
     root.filename = filedialog.askopenfilename(
-        initialdir = "/",title = "Select file",filetypes =
-        (("csv files","*.csv"),("all files","*.*")))
+        initialdir=home+"/Downloads", title="Select Square deposit file", filetypes=
+        (("csv files", "*.csv"), ("all files", "*.*")))
 
     print(f"Opening file {root.filename}")
     square_filename = root.filename.split('/')[-1]
