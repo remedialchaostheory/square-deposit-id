@@ -92,7 +92,7 @@ def main():
 
     # Iterate through raw data and add to dictionary
     iterraw_data = iter(raw_data)
-    next(iterraw_data)
+    next(iterraw_data)  # skip headings
     square = {}
     for row in iterraw_data:
         deposit_id = row[8]
@@ -142,7 +142,7 @@ def main():
         del square[deposit_id]
 
     if not is_sorted(deposit_list):
-        deposit_list.sort(key=itemgetter(0))
+        deposit_list.sort(key=itemgetter(0))  # sort by date
 
     print(f"\nWriting data to {new_filename}..")
     # Write deposit list to .csv with headings
