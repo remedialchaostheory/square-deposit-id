@@ -3,7 +3,7 @@ import csv
 from tkinter import filedialog
 from tkinter import *
 from operator import itemgetter
-
+from pathlib import Path
 
 def format_date(orig_date):
     """
@@ -49,7 +49,7 @@ def main():
 
     print(f"Opening file {root.filename}")
     square_filename = root.filename.split('/')[-1]
-    absolute_path = '/'.join(root.filename.split('/')[:-1])
+    abs_path_to_dir = '/'.join(root.filename.split('/')[:-1])
 
     # Open the csv file and create an array of each row
     raw_data = []
@@ -59,22 +59,23 @@ def main():
             raw_data.append(row)
     # ------------------------
 
-    # Uncomment for testing
-    # ------------------
-    # test_file = ""
-    # print(test_file)
+    # # Uncomment for testing
+    # # ------------------
+    # home = str(Path.home())
+    # test_file = home + "/Desktop/square deposits/deposit-details-2018-12-01-2019-01-01 - sb.csv"
+    # print(f"Using test file {test_file}")
     # square_filename = test_file.split('/')[-1]
-    # absolute_path = '/'.join(test_file.split('/')[:-1])
+    # abs_path_to_dir = '/'.join(test_file.split('/')[:-1])
     # print(square_filename)
-    # print(absolute_path, 'absolute path')
-
-    # Open the csv file and create an array of each row
+    # print(abs_path_to_dir, 'absolute path')
+    #
+    # # Open the csv file and create an array of each row
     # raw_data = []
     # with open(test_file, 'r') as f:
     #     reader = csv.reader(f)
     #     for row in reader:
     #         raw_data.append(row)
-    # ------------------
+    # # ------------------
 
     # Get first and last date of the csv contents
     first_date = raw_data[-1][0].split(',')[0]
@@ -87,8 +88,10 @@ def main():
     last_date = format_date(last_date)
 
     # Format new filename
-    new_filename = (absolute_path + '/' + 'square_deposits_for_qb_' +
-              first_date + '-' + last_date + '.csv')
+    location = str(raw_data[1][-1])
+    new_square_filename = ('Square deposits for qb - ' + location + ' - ' +
+                           first_date + ' to ' + last_date + '.csv')
+    new_abs_path_to_file = (abs_path_to_dir + '/' + new_square_filename)
 
     # Iterate through raw data and add to dictionary
     iterraw_data = iter(raw_data)
@@ -144,9 +147,9 @@ def main():
     if not is_sorted(deposit_list):
         deposit_list.sort(key=itemgetter(0))  # sort by date
 
-    print(f"\nWriting data to {new_filename}..")
+    print(f"\nWriting data to {new_abs_path_to_file}..")
     # Write deposit list to .csv with headings
-    with open(new_filename, mode='w') as square_deposits:
+    with open(new_abs_path_to_file, mode='w') as square_deposits:
         square_writer = csv.writer(square_deposits, delimiter=',', quotechar='"')
         square_writer.writerow(
             ['Deposit Date', 'Deposit ID', 'Total Collected', 'Card Collected', 'Fees', 'Deposited'])
