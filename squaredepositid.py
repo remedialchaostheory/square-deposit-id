@@ -46,12 +46,10 @@ def main():
     root.filename = filedialog.askopenfilename(
         initialdir = "/",title = "Select file",filetypes =
         (("csv files","*.csv"),("all files","*.*")))
-    print(root.filename)
-    base_fn = root.filename.split('/')[-1]
-    base_path = '/'.join(root.filename.split('/')[:-1])
-    print(base_fn)
-    print(base_path, 'base_path')
-    original_fn = base_fn
+
+    print(f"Opening file {root.filename}")
+    square_filename = root.filename.split('/')[-1]
+    absolute_path = '/'.join(root.filename.split('/')[:-1])
 
     # Open the csv file and create an array of each row
     raw_data = []
@@ -65,11 +63,10 @@ def main():
     # ------------------
     # test_file = ""
     # print(test_file)
-    # base_fn = test_file.split('/')[-1]
-    # base_path = '/'.join(test_file.split('/')[:-1])
-    # print(base_fn)
-    # print(base_path, 'base_path')
-    # original_fn = base_fn
+    # square_filename = test_file.split('/')[-1]
+    # absolute_path = '/'.join(test_file.split('/')[:-1])
+    # print(square_filename)
+    # print(absolute_path, 'absolute path')
 
     # Open the csv file and create an array of each row
     # raw_data = []
@@ -82,27 +79,21 @@ def main():
     # Get first and last date of the csv contents
     first_date = raw_data[-1][0].split(',')[0]
     last_date = raw_data[1][0].split(',')[0]
-    print('first ', first_date)
-    print('last ', last_date)
+    print("\nBeginning date:", first_date)
+    print("Ending date:   ", last_date)
 
     # Format dates w/ year month then day
     first_date = format_date(first_date)
     last_date = format_date(last_date)
 
     # Format new filename
-    new_fn = (base_path + '/' + 'square-qb-deposits-' +
+    new_filename = (absolute_path + '/' + 'square_deposits_for_qb_' +
               first_date + '-' + last_date + '.csv')
 
-    # Iterate through raw_data and save
-    square = {}
-    deposit_date = ''
-    total_collected = 0
-    fees = 0
-    deposited = 0
-    deposit_id = 0
-
+    # Iterate through raw data and add to dictionary
     iterraw_data = iter(raw_data)
     next(iterraw_data)
+    square = {}
     for row in iterraw_data:
         deposit_id = row[8]
         deposit_date = row[0]
@@ -120,7 +111,7 @@ def main():
 
         # print(deposit_date, total_collected, fees, deposited, deposit_id)
 
-        # E.g. {'2Z66AKKQ0DJC8YK5AVBY12E74ZE9': ['12/31/18', 113.35, -3.13, 110.22]}
+        # E.g. {'2Z66AKKQ0DJC8YKY12E74ZE9': ['12/31/18', 113.35, -3.13, 110.22]}
         if deposit_id not in square:
             square[deposit_id] = [deposit_date, total_collected, fees, deposited]
         else:
@@ -153,10 +144,9 @@ def main():
     if not is_sorted(deposit_list):
         deposit_list.sort(key=operator.itemgetter(0))
 
-    print("deposit list ", deposit_list)
-
+    print(f"\nWriting data to {new_filename}..")
     # Write deposit list to .csv with headings
-    with open(new_fn, mode='w') as square_deposits:
+    with open(new_filename, mode='w') as square_deposits:
         square_writer = csv.writer(square_deposits, delimiter=',', quotechar='"')
         square_writer.writerow(
             ['Deposit Date', 'Deposit ID', 'Total Collected', 'Card Collected', 'Fees', 'Deposited'])
