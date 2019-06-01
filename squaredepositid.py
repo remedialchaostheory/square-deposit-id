@@ -2,7 +2,7 @@
 import csv
 from tkinter import filedialog
 from tkinter import *
-import operator
+from operator import itemgetter
 
 
 def format_date(orig_date):
@@ -142,7 +142,7 @@ def main():
         del square[deposit_id]
 
     if not is_sorted(deposit_list):
-        deposit_list.sort(key=operator.itemgetter(0))
+        deposit_list.sort(key=itemgetter(0))
 
     print(f"\nWriting data to {new_filename}..")
     # Write deposit list to .csv with headings
