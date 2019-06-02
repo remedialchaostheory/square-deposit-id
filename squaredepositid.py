@@ -110,6 +110,7 @@ def main():
         deposit_date = row[0]
 
         total_collected = row[5]
+        # TODO - refactor extracting the amounts e.g. "$38.90" -> int
         total_collected = ''.join(total_collected.split('$'))
         total_collected = float(''.join(total_collected.split(',')))
 
