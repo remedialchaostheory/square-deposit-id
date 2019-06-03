@@ -27,7 +27,7 @@ def calc_card_collected(fees, deposited):
     :param deposited: e.g. 100.00
     :return: e.g. 109.9
     """
-    return round(deposited - fees, 2)
+    return round(deposited - -abs(fees), 2)
 
 
 def is_sorted(input_list):
