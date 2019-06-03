@@ -97,7 +97,7 @@ def main():
 
     # Format new filename
     location = str(raw_data[1][-1])
-    new_square_filename = ('Square deposits for qb - ' + location + ' - ' +
+    new_square_filename = ('Square deposits for QB - ' + location + ' - ' +
                            first_date + ' to ' + last_date + '.csv')
     new_abs_path_to_file = (abs_path_to_dir + '/' + new_square_filename)
 
