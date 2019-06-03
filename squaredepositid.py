@@ -168,7 +168,7 @@ def main():
             square_writer.writerow([row[0], row[1], row[2], row[3], row[4], row[5]])
 
     messagebox.showinfo(
-        "Presto!", "File is named:\n\n" + new_square_filename)
+        "Presto!", "File is named:\n\n" + new_square_filename + "\n\nIt's located in the same folder as original")
 
 if __name__ == '__main__':
     main()
