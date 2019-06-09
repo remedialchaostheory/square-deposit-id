@@ -10,4 +10,5 @@ A small executable file is located here(https://www.dropbox.com/s/st5w07tjb8ks9c
 
 **Note**: Only for MacOS. Tested on High Sierra.
 
+<br>
 Need more columns or a version to run on Windows? Feel free to contact me.
